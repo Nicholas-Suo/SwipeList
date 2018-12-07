@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         SwipeAdapter adapter = new SwipeAdapter(getBaseContext());
         swipeListView.setAdapter(adapter);
         List<String> list = new ArrayList<String>();
-        for(int i=0;i<1;i++){
+        for(int i=0;i<20;i++){
             list.add("item "+i);
         }
         adapter.setData(list);
