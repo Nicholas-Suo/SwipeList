@@ -15,14 +15,19 @@ class SwipeLinearLayout extends LinearLayout {
     Scroller scroller;
     private static final int CHILD_TEXT_VIEW = 0;
     private static final int CHILD_DELETE_IMG = 1; //this value is from swipe_item.xml
-    private static final int ICON_DEFAULT_WIDTH = 56;
+    public static final int ICON_DEFAULT_WIDTH = 120;//56
+    private static final boolean STATUS_NONE = false;
+    private static final boolean STATUS_OPEND = true;
     ImageView deleteImageView;
     TextView itemTextView;
     private int iconWidth = ICON_DEFAULT_WIDTH;
     private int mTouchMoveDistance = 0;
-    private static final int STATUS_NONE = 0;
-   // private static final int STATUS_ = 0;
-    private int swipeStatus ;
+
+    private boolean  swipeStatus = STATUS_NONE ;
+
+    public boolean isStatusOpend() {
+        return swipeStatus;
+    }
 
     public SwipeLinearLayout(Context context) {
         super(context);
@@ -51,6 +56,7 @@ class SwipeLinearLayout extends LinearLayout {
      */
     private void init(){
         Log.d(TAG," layout begin init");
+        swipeStatus = STATUS_NONE;
         if(scroller == null){
             scroller = new Scroller(getContext());
         }
@@ -58,17 +64,19 @@ class SwipeLinearLayout extends LinearLayout {
     /*
      * slide the item,then relayout.
      */
-    public void Swipe(int deltX){
+    private void swipe(int deltX){
 
         Log.d(TAG,"  is Swiping Math.abs(deltX) " + Math.abs(deltX));
         if(Math.abs(deltX) > ICON_DEFAULT_WIDTH  && deltX < 0){// deltx<0 --> swipe left,and the width can not larger than icom width.
             Log.d(TAG,"  is Swiping the deltX is larger ");
                 mTouchMoveDistance =  -ICON_DEFAULT_WIDTH;
-        }else if(deltX > 0){//deltX > 0 ,swipe right when no up move touch,should close the icon.menu.
+        }else if(deltX > 0 && swipeStatus == STATUS_NONE){//deltX > 0 ,swipe right when no up move touch,should close the icon.menu.
             mTouchMoveDistance = 0;
         }else{
             mTouchMoveDistance = deltX;
         }
+
+
         Log.d(TAG,"  is Swiping mTouchMoveDistance " + mTouchMoveDistance);
         if(Math.abs(mTouchMoveDistance) <= iconWidth){
             scroller.startScroll(0,0,mTouchMoveDistance,0);
@@ -99,6 +107,7 @@ class SwipeLinearLayout extends LinearLayout {
         super.onLayout(changed, l, t, r, b);
         int count = getChildCount();
         Log.d(TAG," onLayout the layout child number: " + count);
+/*
         if(CHILD_DELETE_IMG > count){
             Log.d(TAG,"the value is larger than count,return");
             return;
@@ -116,7 +125,19 @@ class SwipeLinearLayout extends LinearLayout {
           //  params.gravity = Gravity.CENTER_VERTICAL;
             deleteImageView.setLayoutParams(params);
         }
+*/
     }
 
+    /**
+     * if the right menu is showing,
+     * then close it.set status is none.
+     */
+    public void hideRightMenu(){
+        swipeStatus = STATUS_NONE;//if deltX > 0 ,means we have close the right menu. swipe from left to right.
+        swipe(0);
+    }
 
+    public void swipeItemView(int deltX){
+        swipe(deltX);
+    }
 }

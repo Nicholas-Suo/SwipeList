@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -41,17 +42,25 @@ public class SwipeAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ItemHolder holder = null;
+        final int position = i;
         if(view == null){
             LayoutInflater inflater = LayoutInflater.from(mContext);
             view = inflater.inflate(R.layout.swipe_item,viewGroup,false);
             holder = new ItemHolder();
             holder.itemText = (TextView)view.findViewById(R.id.item_text);
-            holder.itemDelImg = (ImageView)view.findViewById(R.id.item_delete_img);
+         //  holder.itemDelImg = (ImageView)view.findViewById(R.id.item_delete_img);
             view.setTag(holder);
         }else{
             holder = (ItemHolder)view.getTag();
         }
         holder.itemText.setText(getItem(i));
+/*        holder.itemDelImg.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext," the delet img click: position " + position,Toast.LENGTH_SHORT).show();
+            }
+        });*/
         return view;
     }
 
